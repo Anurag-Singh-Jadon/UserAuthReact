@@ -1,12 +1,17 @@
 
 
-import { useState, useRef } from 'react';
+import { useState, useRef,useContext } from 'react';
+import {useHistory} from 'react-router-dom';
+import AuthContext from '../../store/auth-context';
 
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
+  const history = useHistory();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
+
+  const authCtx = useContext(AuthContext);       /* Here useContext aim to use Token during login or logout*/
 
   const [isLogin, setIsLogin] = useState(true);
   const[isLoading,setIsLoding] = useState(false);
@@ -63,8 +68,8 @@ const AuthForm = () => {
         });
       }
     }).then(data => {
-      console.log(data);
-      alert(data)
+      authCtx.login(data.idToken);           /* Here we can see the token             */
+       history.replace('/')
     }).catch(err =>{
       alert(err.message);
     });
